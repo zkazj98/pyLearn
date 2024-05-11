@@ -1,4 +1,5 @@
 import copy
+import time
 
 
 def helloworld():
@@ -202,5 +203,115 @@ def jiHe():
     print(t)
 
 
+# 关键词参数,默认值参数
+# help(函数) 获取到的参数，/左侧必须是位置参数，右侧可以使关键字参数
+# 使用*之后，右侧只能用关键字参数，左侧可以位置参数或者关键字参数
+def myfunc(o, /, vt=666):
+    print("".join((o, str(vt))))
+
+
+# 形参可以传入多个参数
+def myfunc1(*args, **kwargs):
+    print("有{}个参数,关键字参数有{}个".format(len(args), len(kwargs)))
+    print("第二个参数{}".format(args[1]))
+    print(kwargs)
+
+
+# 解包 global可以修改区局变量值
+def myfunc2(a, b, c, d):
+    # global x
+    x = 100
+    print(a, b, c, d)
+
+
+# 嵌套函数
+def myfunc3():
+    print("一层嵌套")
+    x = 12000
+
+    def mf():
+        # 获取外部函数参数
+        nonlocal x
+        x = 998989
+        print("二层嵌套")
+
+    mf()
+
+
+# 外层参数传递
+def myfunc4(x, y):
+    def mf(x1, y1):
+        # 获取外部函数参数
+        nonlocal x, y
+        x += x1
+        y += y1
+        print(x)
+        print(y)
+
+    return mf
+
+
+def myfunc5(func):
+    func(1, 2)
+
+
+# 装饰器,可以有多个装饰器
+def decorators(func):
+    def call_func():
+        print("开始运行程序.....")
+        start = time.time()
+        func()
+        end = time.time()
+        print(f"一共耗费了{(end - start):.2f}秒")
+
+    return call_func
+
+
+@decorators
+def mf():
+    time.sleep(2)
+
+
+# 装饰器,可以有多个装饰器,这种就是装饰器添加参数的写法，其实就是多了一层函数嵌套
+def logger(a):
+    def decorators1(func):
+        def call_func():
+            print("开始运行程序.....")
+            start = time.time()
+            func()
+            end = time.time()
+            print(f"一共耗费了{(end - start):.2f}秒")
+
+        return call_func
+
+    return decorators1
+
+
+@logger(a="sdasas")
+def mf1():
+    time.sleep(2)
+
+
 if __name__ == '__main__':
-    jiHe()
+    # myfunc(o="zk")
+    # myfunc1("sadasdas", 2123, "dasdasdasdadsas",kw=123,zk=12121)
+    # args = (1, 2, 3, 4)
+    # x = 1000
+    # myfunc2(*args)
+    # kwargs = {'a': 1, 'b': 2}
+    # myfunc1(*args, **kwargs)
+    # myfunc4()
+    # print(x)
+    # fun = myfunc4(0, 0)
+    # fun(2, 3)
+    # fun(2, 3)
+    # myfunc5(myfunc4(0, 0))
+    # 非装饰器写法其实就是
+    # func = decorators(mf)
+    # func()
+    #
+    # lambda表达式
+    squareY = lambda y: y * y
+    print(squareY(10))
+    mappend = map(lambda y: ord(y) + 10, "Finch")
+    print(list(mappend))
