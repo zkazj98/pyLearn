@@ -1,4 +1,5 @@
 import copy
+import functools
 import time
 
 
@@ -292,6 +293,53 @@ def mf1():
     time.sleep(2)
 
 
+# 生成器
+def counter():
+    i = 0
+    while i <= 5:
+        yield i
+        i += 1
+
+
+# 函数注释
+def exchange(dollar, rate=6.32):
+    """
+    获取人民币金额
+    :param dollar:美元金额
+    :param rate:汇率
+    :return:
+    """
+    return dollar * rate
+
+
+# 函数类型注释
+def exchangeOne(dollar: int, rate: float = 6.32) -> float:
+    """
+    获取人民币金额
+    :param dollar:美元金额
+    :param rate:汇率
+    :return:
+    """
+    return dollar * rate
+
+
+def add(x, y):
+    return x + y
+
+
+# 装饰器处理,这样处理实际调用函数就不是call_func了
+def decoratorsWraps(func):
+    @functools.wraps(func)
+    def call_func():
+        print("开始运行程序.....")
+        start = time.time()
+        func()
+        end = time.time()
+        print(f"一共耗费了{(end - start):.2f}秒")
+
+    return call_func
+
+
 if __name__ == '__main__':
     # myfunc(o="zk")
     # myfunc1("sadasdas", 2123, "dasdasdasdadsas",kw=123,zk=12121)
@@ -311,7 +359,19 @@ if __name__ == '__main__':
     # func()
     #
     # lambda表达式
-    squareY = lambda y: y * y
-    print(squareY(10))
-    mappend = map(lambda y: ord(y) + 10, "Finch")
-    print(list(mappend))
+    # squareY = lambda y: y * y
+    # print(squareY(10))
+    # mappend = map(lambda y: ord(y) + 10, "Finch")
+    # print(list(mappend)
+
+    # 生成器推导式
+    # f = (i ** 2 for i in range(10))
+    # while True:
+    #     print(next(f))
+    # print(exchangeOne.__doc__)
+    # 这里就是将后面的集合依次使用前面函数处理
+    res = functools.reduce(lambda x, y: x * y, (1, 2, 3, 4, 5))
+    print(res)
+    # 偏函数
+    pian = functools.partial(pow, exp=2)
+    print(pian(2))
