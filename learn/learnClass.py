@@ -186,7 +186,7 @@ class MiaoSon:
         self._x = x
 
 
-# 手动实现Property
+# 手动实现Property，描述符只能应用在类属性上，不能应用在对象属性上
 class MyProperty:
     def __init__(self, fget=None, fset=None, fdel=None):
         self.fget = fget
@@ -302,5 +302,4 @@ if __name__ == "__main__":
     print(c.x)
 
     myPropertySon = MyPropertySonOne()
-    myPropertySon.x = 16
-    print(myPropertySon.__dict__)
+    print(myPropertySon.x)
