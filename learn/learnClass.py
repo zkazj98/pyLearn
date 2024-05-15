@@ -117,6 +117,7 @@ class Cc:
     def delx(self):
         del self._x
 
+    # 其实就是通过另一种方式管理私有变量
     x = property(getx, setx, delx)
 
 
@@ -166,6 +167,89 @@ class StaticMethod:
         print(f"一共实例化了 {StaticMethod.count}个")
 
 
+# 描述符
+class Miao:
+    def __get__(self, instance, owner):
+        return instance._x
+
+    def __set__(self, instance, value):
+        instance._x = value
+
+    def __delete__(self, instance):
+        del instance._x
+
+
+class MiaoSon:
+    x = Miao()
+
+    def __init__(self, x=250):
+        self._x = x
+
+
+# 手动实现Property
+class MyProperty:
+    def __init__(self, fget=None, fset=None, fdel=None):
+        self.fget = fget
+        self.fset = fset
+        self.fdel = fdel
+
+    def __get__(self, instance, owner):
+        return self.fget(instance)
+
+    def __set__(self, instance, value):
+        self.fset(instance, value)
+
+    def __delete__(self, instance):
+        self.fdel(instance)
+
+    def getter(self, func):
+        self.fget = func
+        return self
+
+    def setter(self, func):
+        self.fset = func
+        return self
+
+    def deleter(self, func):
+        self.fdel = func
+        return self
+
+
+class MyPropertySonOne:
+
+    def __init__(self):
+        self._x = 1000
+
+    @MyProperty
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = value
+
+    @x.deleter
+    def x(self):
+        del self._x
+
+
+class MyPropertySon:
+
+    def __init__(self):
+        self._x = 1000
+
+    def getx(self):
+        return self._x
+
+    def setx(self, value):
+        self._x = value
+
+    def delx(self):
+        del self._x
+
+    x = MyProperty(getx, setx, delx)
+
+
 # 钻石继承指的是一个类使得父类被初始化两次，使用super初始化上级可以解决super().init()
 
 if __name__ == "__main__":
@@ -212,3 +296,11 @@ if __name__ == "__main__":
     p1 = StaticMethod()
     o1 = StaticMethod()
     print(StaticMethod.funcB())
+
+    c = MiaoSon()
+    c.x = 1000
+    print(c.x)
+
+    myPropertySon = MyPropertySonOne()
+    myPropertySon.x = 16
+    print(myPropertySon.__dict__)
