@@ -238,6 +238,10 @@ class MyPropertySon:
     def __init__(self):
         self._x = 1000
 
+    # 重写了这个方法之后，这个方法会在子类继承之后先行拦截类似类属性参数的赋值操作
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__()
+
     def getx(self):
         return self._x
 
@@ -303,3 +307,14 @@ if __name__ == "__main__":
 
     myPropertySon = MyPropertySonOne()
     print(myPropertySon.x)
+
+
+    def pp(self,name):
+        print(name)
+
+
+    C = type('C', (), {})
+    print(C.__bases__)
+    D = type('D', (C,), dict(a=120, b=130, say_hi=pp))
+    d = D()
+    d.say_hi("nihao")
