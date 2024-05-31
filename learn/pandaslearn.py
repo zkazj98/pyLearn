@@ -35,6 +35,7 @@ df = pd.read_csv(
 # print(df.loc[:,'股票名称':'收盘价'])  # 逗号前是行范围，后面是列范围
 # print(df.loc[:,:])  # 全部数据
 # print(df.at["13/12/2016", "收盘价"])  # 获取指定单个元素数据
+# print(df.loc["13/12/2016", "收盘价"])  # 获取指定单个元素数据
 
 
 # print(df['收盘价']*100) # 所有数据乘100
@@ -98,8 +99,8 @@ df.reset_index(inplace=True)  # 将设置的index恢复
 # print(df.dtypes)
 df['交易日期'] = pd.to_datetime(df['交易日期'], dayfirst=True)  # 修改成时间格式
 print(df['交易日期'].dt.dayofweek)  # 获取年，还有很多像是year，month，dayofweek获取这是第几天
-#df['交易日期'] + pd.Timedelta(days=1)  # 添加时间差
+# df['交易日期'] + pd.Timedelta(days=1)  # 添加时间差
 df['收盘价_3天均值'] = df['收盘价'].rolling(3).mean()  # 计算三天平均收盘价
 df['收盘价_至今均值'] = df['收盘价'].expanding().mean()  # 计算至今平均收盘价
-print(df[['收盘价', '收盘价_3天均值','收盘价_至今均值']])
-df.to_csv('../output.csv',encoding='GBK',index=False)# 导出csv，设置编码格式，是否保留索引
+print(df[['收盘价', '收盘价_3天均值', '收盘价_至今均值']])
+df.to_csv('../output.csv', encoding='GBK', index=False)  # 导出csv，设置编码格式，是否保留索引
