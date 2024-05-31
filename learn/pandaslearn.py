@@ -75,7 +75,7 @@ df = pd.read_csv(
 # print(df.isnull())  # 获取每个值是不是空
 # print(df[df['MACD_金叉死叉'].notnull()])  # 判断固定列值是不是为空
 
-# df.reset_index(inplace=True)  # 将设置的index恢复
+df.reset_index(inplace=True)  # 将设置的index恢复
 # print(df.sort_values(by=['交易日期', '收盘价'], ascending=[True, False]))  # ascending的True是正序，false是倒序
 # df1 = df.iloc[0:10][['股票代码', '收盘价']]
 # df2 = df.iloc[5:15][['股票代码', '收盘价']]
@@ -93,6 +93,13 @@ df = pd.read_csv(
 # print(df['股票代码'].str.len())  # 字符长度
 # print(df['股票代码'].str.contains('sz'))  # 判断字符串长度是否存在
 
-print(df['新浪概念'].str.split('；').apply(pd.Series))  # 获取分割后数据，为什么要使用str，pands规定的,split之后apply(
+# print(df['新浪概念'].str.split('；').apply(pd.Series))  # 获取分割后数据，为什么要使用str，pands规定的,split之后apply(
 # pd.Series)可以平铺展开，explode()可以垂直展开
-
+# print(df.dtypes)
+df['交易日期'] = pd.to_datetime(df['交易日期'], dayfirst=True)  # 修改成时间格式
+print(df['交易日期'].dt.dayofweek)  # 获取年，还有很多像是year，month，dayofweek获取这是第几天
+#df['交易日期'] + pd.Timedelta(days=1)  # 添加时间差
+df['收盘价_3天均值'] = df['收盘价'].rolling(3).mean()  # 计算三天平均收盘价
+df['收盘价_至今均值'] = df['收盘价'].expanding().mean()  # 计算至今平均收盘价
+print(df[['收盘价', '收盘价_3天均值','收盘价_至今均值']])
+df.to_csv('../output.csv',encoding='GBK',index=False)# 导出csv，设置编码格式，是否保留索引
