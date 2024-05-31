@@ -1,6 +1,10 @@
 import pandas as pd  # download library to read data into dataframe
 import re
 import numpy as np
+from sklearn import tree
+from sklearn.metrics import accuracy_score, confusion_matrix
+import itertools
+import matplotlib.pyplot as plt
 
 pd.set_option('display.max_columns', None)
 
@@ -60,9 +64,3 @@ print("Number of rows of processed dataframe is {}.".format(rows_after))
 print("{} rows removed!".format(rows_before - rows_after))
 recipes = recipes.replace(to_replace="Yes", value=1)
 recipes = recipes.replace(to_replace="No", value=0)
-check_recipes = recipes.loc[
-    (recipes["rice"] == 1) &
-    (recipes["soy_sauce"] == 1) &
-    (recipes["wasabi"] == 1) &
-    (recipes["seaweed"] == 1)
-]
