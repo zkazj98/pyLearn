@@ -19,5 +19,13 @@ df['收盘价_后复权'] = init_price * df['复权因子']
 df['开盘价_后复权'] = df['开盘价'] / df['收盘价'] * df['收盘价_后复权']
 df['最高价_后复权'] = df['最高价'] / df['收盘价'] * df['收盘价_后复权']
 df['最低价_后复权'] = df['最低价'] / df['收盘价'] * df['收盘价_后复权']
-
-df.to_csv("outpu_sz300001.csv", index=False, mode='w', float_format='%.15f', encoding='gbk')
+# df.to_csv("output_sz300001.csv", index=False, mode='w', float_format='%.15f', encoding='gbk')
+df[['开盘价', '最高价', '最低价', '收盘价']] = df[['开盘价_后复权', '最高价_后复权', '最低价_后复权', '收盘价_后复权']]
+df = df[['交易日期', '股票代码', '开盘价', '最高价', '最低价', '收盘价', '涨跌幅']]
+ma_5 = 5
+ma_50 = 50
+df['ma_5'] = df['收盘价'].rolling(ma_5).mean()
+df['ma_50'] = df['收盘价'].rolling(ma_50).mean()
+df = df.assign(ma_5=df['ma_5'].fillna(value=df['收盘价'].expanding().mean()),
+               ma_50=df['ma_50'].fillna(value=df['收盘价'].expanding().mean()))
+print(df)
