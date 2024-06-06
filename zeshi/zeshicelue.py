@@ -28,4 +28,14 @@ df['ma_5'] = df['收盘价'].rolling(ma_5).mean()
 df['ma_50'] = df['收盘价'].rolling(ma_50).mean()
 df = df.assign(ma_5=df['ma_5'].fillna(value=df['收盘价'].expanding().mean()),
                ma_50=df['ma_50'].fillna(value=df['收盘价'].expanding().mean()))
+
+condition1 = df['ma_5'] >= df['ma_50']
+condition2 = df['ma_5'].shift(1) < df['ma_50'].shift(1)
+df.loc[(condition1 & condition2),'signal'] = 1
+
+condition1 = df['ma_5'] <= df['ma_50']
+condition2 = df['ma_5'].shift(1) > df['ma_50'].shift(1)
+df.loc[(condition1 & condition2),'signal'] = 0
+
+df.drop(columns=['ma_5', 'ma_50'], axis=1,inplace=True)
 print(df)
